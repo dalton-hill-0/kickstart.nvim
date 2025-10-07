@@ -675,23 +675,23 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        ts_ls = {},
-        cssls = {},
-        cssmodules_ls = {},
-        css_variables = {},
-        tailwindcss = {},
+        -- ts_ls = {},
+        -- cssls = {},
+        -- cssmodules_ls = {},
+        -- css_variables = {},
+        -- tailwindcss = {},
         gopls = {},
         golangci_lint_ls = {},
-        yamlls = {
-          settings = {
-            yaml = {
-              schemas = {
-                ['https://spec.openapis.org/oas/v3.1.1/schema.json'] = 'openapi.yaml',
-              },
-            },
-          },
-        },
-        spectral = {},
+        -- yamlls = {
+        --   settings = {
+        --     yaml = {
+        --       schemas = {
+        --         ['https://spec.openapis.org/oas/v3.1.1/schema.json'] = 'openapi.yaml',
+        --       },
+        --     },
+        --   },
+        -- },
+        -- spectral = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -736,8 +736,9 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'css-lsp',
-        'prettierd',
+        'markdownlint',
+        -- 'css-lsp',
+        -- 'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
