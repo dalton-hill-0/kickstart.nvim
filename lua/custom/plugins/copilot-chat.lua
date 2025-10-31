@@ -6,6 +6,7 @@ return {
     },
     build = 'make tiktoken',
     opts = {
+      model = 'claude-haiku-4.5',
       mappings = {
         complete = {
           insert = '<C-Space>',
