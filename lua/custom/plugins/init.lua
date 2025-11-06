@@ -27,4 +27,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
   once = true,
 })
 
+-- Use the system clipboard for all operations
+vim.opt.clipboard = 'unnamedplus'
+
 return {}
