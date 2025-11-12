@@ -93,6 +93,12 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- [[ Load custom configuration ]]
+-- Load custom settings before plugins to ensure proper initialization order
+require 'custom.options'
+require 'custom.keymaps'
+require 'custom.autocmds'
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -111,12 +117,11 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+--  NOTE: This is now set in lua/custom/options.lua
+--  The scheduled approach below can increase startup time, so we set it directly instead.
+-- vim.schedule(function()
+--   vim.o.clipboard = 'unnamedplus'
+-- end)
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -1037,8 +1042,3 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline` keep going past 80.
 -- vim: ts=2 sts=2 sw=2 et
-
--- Begin Dalton's custom config.
-
-vim.o.textwidth = 80
-vim.o.wrap = true
