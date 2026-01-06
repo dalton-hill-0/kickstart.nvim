@@ -248,7 +248,12 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   {
     'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-    opts = {},
+    opts = {
+      on_tab_options = {
+        ['expandtab'] = false,
+        ['tabstop'] = 2,
+      },
+    },
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -691,7 +696,15 @@ require('lazy').setup({
         --  Feel free to add/remove any LSPs here that you want to install via Mason. They will automatically be installed and setup.
         mason = {
           -- clangd = {},
-          -- gopls = {},
+          markdownlint = {
+            filetypes = { 'markdown' },
+          },
+          gopls = {
+            filetypes = { 'go', 'gotmpl' },
+          },
+          -- yamlls = {
+          --   filetypes = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab', 'yaml.helm-values', 'yaml.gotmpl', 'gotmpl' },
+          -- },
           -- pyright = {},
           -- rust_analyzer = {},
           -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -702,6 +715,7 @@ require('lazy').setup({
           -- But for many setups, the LSP (`ts_ls`) will work just fine
           -- ts_ls = {},
           --
+          -- harper_ls = {},
           lua_ls = {
             -- cmd = { ... },
             -- filetypes = { ... },
@@ -978,7 +992,9 @@ require('lazy').setup({
         'bash',
         'c',
         'diff',
+        'helm',
         'html',
+        'gotmpl',
         'lua',
         'luadoc',
         'markdown',
@@ -1007,6 +1023,22 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+
+  {
+    -- Adapted from https://github.com/ngalaiko/tree-sitter-go-template
+    -- But the go-template treesitter doesn't seem to work for yaml. Helm seems
+    -- like a better option.
+    vim.filetype.add {
+      extension = {
+        gotmpl = 'helm',
+      },
+      pattern = {
+        ['.*/templates/.*%.tpl'] = 'helm',
+        ['.*/templates/.*%.ya?ml'] = 'helm',
+        ['helmfile.*%.ya?ml'] = 'helm',
+      },
+    },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1059,3 +1091,48 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.o.relativenumber = true
+
+vim.opt.linebreak = true
+vim.opt.textwidth = 80
+
+vim.o.spell = true
+
+-- Easier way to display diagnostic.
+vim.keymap.set('n', '<C-I>d', function()
+  vim.diagnostic.open_float()
+end, { noremap = true })
+
+function SetIndentTo2()
+  vim.bo.shiftwidth = 2
+  vim.bo.tabstop = 2
+  vim.bo.softtabstop = 2
+  vim.bo.expandtab = true
+end
+
+vim.api.nvim_create_user_command('SetIndentTo2', SetIndentTo2, {})
+
+-- Configure SetIndentTo2 to be called when opening all files.
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = '*',
+  callback = function()
+    SetIndentTo2()
+  end,
+})
+
+-- Configure SetIndentTo2 to be called when creating new files.
+vim.api.nvim_create_autocmd('BufNewFile', {
+  pattern = '*',
+  callback = function()
+    SetIndentTo2()
+  end,
+})
+
+-- Setup keys for Copilot.
+vim.keymap.set('n', '<leader>ce', function()
+  vim.cmd.Copilot 'enable'
+end, { noremap = true, desc = 'Copilot Enable' })
+vim.keymap.set('n', '<leader>cd', function()
+  vim.cmd.Copilot 'disable'
+end, { noremap = true, desc = 'Copilot Disable' })

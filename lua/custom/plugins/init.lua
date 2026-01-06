@@ -3,6 +3,4 @@
 --
 -- See the kickstart.nvim README for more information
 
-vim.o.relativenumber = true
-
 return {}
