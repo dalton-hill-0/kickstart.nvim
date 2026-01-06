@@ -532,6 +532,12 @@ require('lazy').setup({
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
+          -- Don't attach LSP to diffview buffers
+          local bufname = vim.api.nvim_buf_get_name(event.buf)
+          if bufname:match('^diffview://') then
+            vim.lsp.stop_client(vim.lsp.get_clients({ bufnr = event.buf }))
+            return
+          end
           -- NOTE: Remember that Lua is a real programming language, and as such it is possible
           -- to define small helper and utility functions so you don't have to repeat yourself.
           --
