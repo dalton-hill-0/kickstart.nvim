@@ -760,6 +760,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers.mason or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'black', -- Used to format Python code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -806,11 +807,14 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
+        local timeout_by_ft = {
+          python = 3000,  -- Black can be slow, give it 3 seconds
+        }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
           return {
-            timeout_ms = 500,
+            timeout_ms = timeout_by_ft[vim.bo[bufnr].filetype] or 500,
             lsp_format = 'fallback',
           }
         end
@@ -818,6 +822,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         markdown = { 'markdownlint' },
+        python = { 'black' },
       },
     },
   },
