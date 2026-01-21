@@ -743,7 +743,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'markdownlint',
         -- 'css-lsp',
-        -- 'prettierd',
+        'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -796,6 +796,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        markdown = { 'prettierd' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
