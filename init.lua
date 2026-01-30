@@ -885,12 +885,12 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev', 'obsidian', 'obsidian_new', 'obsidian_tags' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        per_filetype = {
+          markdown = { 'lsp', 'path', 'snippets', 'obsidian', 'obsidian_new', 'obsidian_tags' },
+        },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-          obsidian = { name = 'Obsidian', module = 'blink.compat.source' },
-          obsidian_new = { name = 'Obsidian New', module = 'blink.compat.source' },
-          obsidian_tags = { name = 'Obsidian Tags', module = 'blink.compat.source' },
         },
       },
 
