@@ -976,11 +976,17 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    -- NOTE: nvim-treesitter was completely rewritten and no longer requires setup()
-    -- Treesitter highlighting and other features are now built into Neovim.
-    -- You can still install parsers using :TSInstall <language>
-    -- See: https://github.com/nvim-treesitter/nvim-treesitter
-    -- There are additional nvim-treesitter modules that you can use to interact
+    opts = {
+      highlight = {
+        enable = true,
+        -- Enable additional vim regex highlighting for markdown
+        additional_vim_regex_highlighting = { 'markdown' },
+      },
+    },
+    config = function(_, opts)
+      require('nvim-treesitter.configs').setup(opts)
+    end,
+    -- NOTE: There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
