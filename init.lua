@@ -93,8 +93,8 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- [[ Load custom configuration ]]
--- Load custom settings before plugins to ensure proper initialization order
+--- [[ Load custom configuration ]]
+--- Load custom settings before plugins to ensure proper initialization order
 require 'custom.options'
 require 'custom.keymaps'
 require 'custom.autocmds'
@@ -117,8 +117,9 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  NOTE: This is now set in lua/custom/options.lua
---  The scheduled approach below can increase startup time, so we set it directly instead.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  Remove this option if you want your OS clipboard to remain independent.
+--  See `:help 'clipboard'`
 -- vim.schedule(function()
 --   vim.o.clipboard = 'unnamedplus'
 -- end)
@@ -742,8 +743,9 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'markdownlint',
+        'golangci-lint-langserver', -- golangci_lint_ls LSP server
         -- 'css-lsp',
-        'prettierd',
+        -- 'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -796,7 +798,6 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        markdown = { 'prettierd' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -974,21 +975,11 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+    lazy = false,
+    -- NOTE: nvim-treesitter was completely rewritten and no longer requires setup()
+    -- Treesitter highlighting and other features are now built into Neovim.
+    -- You can still install parsers using :TSInstall <language>
+    -- See: https://github.com/nvim-treesitter/nvim-treesitter
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
@@ -1047,3 +1038,8 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline` keep going past 80.
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Begin Dalton's custom config.
+
+vim.o.textwidth = 80
+vim.o.wrap = true
