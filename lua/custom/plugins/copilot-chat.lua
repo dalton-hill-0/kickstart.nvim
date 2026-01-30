@@ -17,6 +17,9 @@ return {
       { '<leader>cc', '<cmd>CopilotChat<cr>', desc = 'Copilot Chat' },
       { '<leader>cm', '<cmd>CopilotChatModels<cr>', desc = 'Copilot Chat Models' },
       { '<leader>cr', '<cmd>CopilotChatReset<cr>', desc = 'Copilot Chat Reset' },
+      -- Keys for regular copilot. It didn't like configuring keys.
+      { '<leader>cd', '<cmd>Copilot disable<cr>', desc = 'Copilot Disable' },
+      { '<leader>ce', '<cmd>Copilot enable<cr>', desc = 'Copilot Enable' },
     },
   },
 }
