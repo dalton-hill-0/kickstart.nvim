@@ -838,6 +838,7 @@ require('lazy').setup({
         opts = {},
       },
       'folke/lazydev.nvim',
+      'saghen/blink.compat',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -883,9 +884,12 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'obsidian', 'obsidian_new', 'obsidian_tags' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          obsidian = { name = 'Obsidian', module = 'blink.compat.source' },
+          obsidian_new = { name = 'Obsidian New', module = 'blink.compat.source' },
+          obsidian_tags = { name = 'Obsidian Tags', module = 'blink.compat.source' },
         },
       },
 
