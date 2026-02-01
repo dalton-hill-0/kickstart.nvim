@@ -984,7 +984,7 @@ require('lazy').setup({
       },
     },
     config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
+      require('nvim-treesitter').setup(opts)
     end,
     -- NOTE: There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
