@@ -534,8 +534,8 @@ require('lazy').setup({
         callback = function(event)
           -- Don't attach LSP to diffview buffers
           local bufname = vim.api.nvim_buf_get_name(event.buf)
-          if bufname:match('^diffview://') then
-            vim.lsp.stop_client(vim.lsp.get_clients({ bufnr = event.buf }))
+          if bufname:match '^diffview://' then
+            vim.lsp.stop_client(vim.lsp.get_clients { bufnr = event.buf })
             return
           end
           -- NOTE: Remember that Lua is a real programming language, and as such it is possible
@@ -761,6 +761,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'black', -- Used to format Python code
+        'prettierd', -- Used to format various web related code and markdown
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -808,7 +809,7 @@ require('lazy').setup({
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         local timeout_by_ft = {
-          python = 3000,  -- Black can be slow, give it 3 seconds
+          python = 3000, -- Black can be slow, give it 3 seconds
         }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
@@ -821,7 +822,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        markdown = { 'markdownlint' },
+        markdown = { 'prettierd' },
         python = { 'black' },
       },
     },
