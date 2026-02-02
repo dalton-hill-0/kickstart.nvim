@@ -721,7 +721,31 @@ require('lazy').setup({
           -- But for many setups, the LSP (`ts_ls`) will work just fine
           -- ts_ls = {},
           --
-          -- harper_ls = {},
+          -- Harper-ls: Grammar and spell checker for markdown/text/git commits
+          -- Keybindings are in lua/custom/plugins/harper.lua
+          -- Dictionary: .harper-ls-dict.txt (project-specific)
+          harper_ls = {
+            filetypes = { 'markdown', 'text', 'gitcommit', 'go' },
+            settings = {
+              ['harper-ls'] = {
+                linters = {
+                  spell_check = true,
+                  spelled_numbers = false,
+                  an_a = true,
+                  sentence_capitalization = true,
+                  unclosed_quotes = true,
+                  wrong_quotes = false,
+                  long_sentences = true,
+                  repeated_words = true,
+                  spaces = true,
+                  matcher = true,
+                },
+                codeActions = {
+                  forceStable = true,
+                },
+              },
+            },
+          },
           lua_ls = {
             -- cmd = { ... },
             -- filetypes = { ... },
