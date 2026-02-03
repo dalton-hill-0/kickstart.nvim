@@ -724,28 +724,266 @@ require('lazy').setup({
           -- Harper-ls: Grammar and spell checker for markdown/text/git commits
           -- Keybindings are in lua/custom/plugins/harper.lua
           -- Dictionary: .harper-ls-dict.txt (project-specific)
-          harper_ls = {
-            filetypes = { 'markdown', 'text', 'gitcommit', 'go' },
-            settings = {
-              ['harper-ls'] = {
-                linters = {
-                  spell_check = true,
-                  spelled_numbers = false,
-                  an_a = true,
-                  sentence_capitalization = true,
-                  unclosed_quotes = true,
-                  wrong_quotes = false,
-                  long_sentences = true,
-                  repeated_words = true,
-                  spaces = true,
-                  matcher = true,
-                },
-                codeActions = {
-                  forceStable = true,
-                },
-              },
-            },
-          },
+          -- harper_ls = {
+          --   filetypes = { 'markdown', 'text', 'gitcommit', 'go' },
+          --   settings = {
+          --     ['harper-ls'] = {
+          --       linters = {
+          --         -- Core linters
+          --         SpellCheck = true, -- Checks spelling against dictionary
+          --         AnA = true, -- Ensures correct usage of 'a' vs 'an' based on pronunciation
+          --         Matcher = true, -- Pattern-based grammar corrections
+          --         Spaces = true, -- Checks for spacing issues
+          --
+          --         -- Capitalization & formatting
+          --         SentenceCapitalization = true, -- Ensures sentences start with capital letters
+          --         CapitalizePersonalPronouns = true, -- Capitalizes 'I' and related contractions
+          --         Months = true, -- Detects months written with a lowercase first letter
+          --
+          --         -- Quotes & punctuation
+          --         UnclosedQuotes = true, -- Detects unclosed quotation marks
+          --         WrongQuotes = false, -- Flags incorrect quote types (e.g., straight vs curly)
+          --         QuoteSpacing = true, -- Checks that quotation marks have proper spacing
+          --         SemicolonApostrophe = true, -- Corrects semicolons typed instead of apostrophes
+          --         Dashes = true, -- Replaces -- or --- with proper en/em dashes
+          --         EllipsisLength = true, -- Ensures correct number of dots in ellipsis
+          --
+          --         -- Sentence structure
+          --         LongSentences = false, -- Warns about overly long sentences
+          --         RepeatedWords = true, -- Detects repeated words (e.g., 'the the')
+          --         CommaFixes = true, -- Fixes comma spacing and Asian comma errors
+          --         OxfordComma = true, -- Requires Oxford comma in lists
+          --         NoOxfordComma = false, -- Prohibits Oxford comma (mutually exclusive with OxfordComma)
+          --
+          --         -- Numbers & suffixes
+          --         SpelledNumbers = false, -- Flags spelled-out numbers (e.g., 'one' instead of '1')
+          --         CorrectNumberSuffix = true, -- Ensures correct ordinal suffixes (1st, 2nd, 3rd, etc.)
+          --         NumberSuffixCapitalization = true, -- Prevents capitalization of number suffixes
+          --
+          --         -- Grammar rules - Infinitives & verb forms
+          --         MissingTo = false, -- Flags missing 'to' before infinitives (e.g., 'need talk' -> 'need to talk')
+          --         LetToDo = true, -- Corrects extraneous 'to' after 'let'
+          --         AllowTo = true, -- Flags erroneous 'allow to' without a subject
+          --         LookingForwardTo = true, -- Ensures gerund follows 'looking forward to'
+          --
+          --         -- Grammar rules - Subject-verb agreement
+          --         IAmAgreement = true, -- Corrects 'I are' to 'I am'
+          --         PronounInflectionBe = true, -- Checks subject-verb agreement for 'be'
+          --         NominalWants = true, -- Ensures correct 'want'/'wants' after nominals
+          --         HavePronoun = true, -- Flags 'has' with pronouns that require 'have'
+          --
+          --         -- Grammar rules - Modals & conditionals
+          --         DoubleModal = true, -- Removes double modal verbs
+          --         ModalOf = true, -- Detects 'of' mistakenly used with would/could/should
+          --         IfWouldve = true, -- Corrects 'if I would've' to 'if I had'
+          --
+          --         -- Common confusions & typos
+          --         ToTwoToo = true, -- Corrects to/two/too confusion
+          --         ThenThan = true, -- Corrects then/than confusion
+          --         ThatThan = true, -- Corrects 'that' typo in comparisons
+          --         ItsContraction = true, -- Helps distinguish "it's" (it is) from "its" (possessive)
+          --         ItsPossessive = true, -- Ensures possessive pronouns don't use apostrophes
+          --         Theres = true, -- Replaces "their's" with "there's"
+          --         Everyday = true, -- Distinguishes 'everyday' (adjective) from 'every day' (adverb)
+          --         APart = true, -- Corrects 'a part' vs 'apart' confusion
+          --         AWhile = true, -- Enforces 'awhile' after verbs, 'a while' elsewhere
+          --         QuiteQuiet = true, -- Distinguishes 'quiet' from 'quite'
+          --
+          --         -- Possessives & contractions
+          --         ElsePossessive = true, -- Detects missing apostrophes in "someone else's"
+          --         PronounContraction = true, -- Fixes pronoun contraction errors
+          --         LetsConfusion = true, -- Corrects "let's" confusion
+          --
+          --         -- Prepositions
+          --         MissingPreposition = true, -- Locates potentially missing prepositions
+          --         AskNoPreposition = true, -- Removes superfluous 'to' in 'ask to us'
+          --         DespiteOf = true, -- Corrects 'despite of' to 'despite' or 'in spite of'
+          --         InterestedIn = true, -- Ensures correct prepositions with 'interested'
+          --         GoodAt = true, -- Checks for 'good in' vs 'good at'
+          --         FascinatedBy = true, -- Ensures correct prepositions with 'fascinated'
+          --
+          --         -- Idiomatic expressions
+          --         AllIntentsAndPurposes = true, -- Corrects wrong forms of this phrase
+          --         BehindTheScenes = true, -- Corrects 'behind the scene' to 'behind the scenes'
+          --         OutOfDate = true, -- Hyphenates 'out-of-date' when used as adjective
+          --         OfCourse = true, -- Corrects 'of curse/corse' to 'of course'
+          --         ViceVersa = true, -- Writes 'vice versa' without hyphens
+          --
+          --         -- Compound words & hyphenation
+          --         DoubleClick = true, -- Hyphenates 'double-click'
+          --         RightClick = true, -- Hyphenates 'right-click'
+          --         WellEducated = true, -- Hyphenates 'well-educated'
+          --         SoonToBe = true, -- Hyphenates 'soon-to-be' before nouns
+          --
+          --         -- Word choice & style
+          --         FillerWords = true, -- Removes filler words
+          --         Hedging = true, -- Flags hedging language
+          --         BoringWords = false, -- Flags overused/boring words
+          --         VeryUnique = true, -- Flags 'very unique' and similar phrases
+          --         Oxymorons = true, -- Flags oxymoronic phrases
+          --
+          --         -- Advanced grammar
+          --         NeedToNoun = true, -- Flags 'need to' before nouns (missing verb)
+          --         MultipleSequentialPronouns = true, -- Catches multiple pronouns in sequence
+          --         SubjectPronoun = true, -- Fixes 'me and X' to 'X and I'
+          --         CompoundSubjectI = true, -- Promotes 'I' in compound subjects
+          --
+          --         -- Regionalisms & variants
+          --         UpdatePlaceNames = true, -- Updates deprecated place names
+          --         JohnsHopkins = true, -- Ensures proper spelling of Johns Hopkins
+          --
+          --         -- Proper nouns & capitalization
+          --         WordPressDotcom = true, -- Ensures correct capitalization of WordPress.com
+          --
+          --         -- Redundancy
+          --         RedundantAcronyms = true, -- Flags 'ATM machine' type redundancies
+          --         RedundantAdditiveAdverbs = true, -- Detects redundant additive adverbs
+          --
+          --         -- Spell-check related
+          --         Misspell = true, -- Ensures 'misspell' is one word
+          --         MergeWords = true, -- Finds valid words split by whitespace
+          --         SplitWords = true, -- Finds missing spaces in compound words
+          --
+          --         -- Less common rules (often disabled by default or specialized)
+          --         Addicting = true, -- Replaces 'addicting' with 'addictive'
+          --         Cant = true, -- Suggests 'can't' for 'cant'
+          --         Didnt = true, -- Corrects 'dint' to "didn't"
+          --         Bought = true, -- Replaces 'bough' with 'bought'
+          --         FeelFell = true, -- Corrects some fell/feel confusions
+          --         ThingThink = true, -- Corrects 'thing' typo when should be 'think'
+          --         ThoughThought = true, -- Corrects 'though' typo when should be 'thought'
+          --         ThesesThese = true, -- Corrects 'theses' misspelling of 'these'
+          --         FindFine = true, -- Fixes 'find' when meaning 'fine'
+          --         SafeToSave = true, -- Detects 'safe' when 'save' intended
+          --         SaveToSafe = true, -- Corrects 'save to' when should be 'safe to'
+          --         WasAloud = true, -- Corrects 'was aloud' to 'was allowed'
+          --         Nobody = true, -- Ensures 'nobody' is one word
+          --         Likewise = true, -- Ensures 'likewise' is one word
+          --         Handful = true, -- Keeps 'handful' as one word
+          --         HelloGreeting = true, -- Prefers 'hello' over 'halo' for greetings
+          --         Hereby = true, -- Corrects 'here by' to 'hereby'
+          --         Misspell = true, -- Ensures 'misspell' is one word
+          --         FirstAidKit = true, -- Corrects 'kid' to 'kit' after aid/starter/travel/tool
+          --         ChockFull = true, -- Ensures proper hyphenation
+          --         Touristic = true, -- Suggests alternatives to 'touristic'
+          --         CriteriaPhenomena = true, -- Ensures proper plural usage
+          --         CureFor = true, -- Prefers 'cure for' over 'cure against'
+          --         Confident = true, -- Distinguishes 'confident' from 'confidant'
+          --
+          --         -- Abbreviation expansion (usually off by default)
+          --         ExpandTimeShorthands = true, -- Expands hr, min, sec, etc.
+          --         ExpandMemoryShorthands = true, -- Expands kB, MB, GB, etc.
+          --         DotInitialisms = true, -- Ensures proper dot separation
+          --
+          --         -- Currency & measurements
+          --         CurrencyPlacement = true, -- Corrects currency symbol position
+          --         HyphenateNumberDay = true, -- Hyphenates '4-day work week'
+          --
+          --         -- Discourse & style
+          --         DiscourseMarkers = true, -- Requires comma after discourse markers
+          --         NoFrenchSpaces = true, -- Prevents French-style spacing
+          --
+          --         -- Advanced/specialized (many enabled by default)
+          --         AdjectiveOfA = true, -- Looks for 'adjective of a' patterns
+          --         AdjectiveDoubleDegree = true, -- Finds double degrees like 'more prettier'
+          --         AfterLater = true, -- Checks for 'later' after 'after [time]'
+          --         AmInTheMorning = true, -- Flags redundant AM with 'in the morning'
+          --         AmountsFor = true, -- Corrects 'amounts for' to 'amounts to'
+          --         AndIn = true, -- Fixes 'an in' to 'and in'
+          --         AndTheLike = true, -- Corrects mistakes in 'and the like'
+          --         AnotherThingComing = true, -- Accepts modern 'another thing coming'
+          --         AnotherThinkComing = false, -- Original but less common variant
+          --         ApartFrom = true, -- Corrects 'apart form' to 'apart from'
+          --         AvoidCurses = true, -- Flags offensive language
+          --         BackInTheDay = true, -- Corrects 'back in the days' to singular
+          --         BeAllowed = true, -- Ensures 'be allowed' after future negatives
+          --         BestOfAllTime = true, -- Prefers singular 'time' in superlatives
+          --         BrandBrandish = true, -- Distinguishes 'brand' from 'brandish'
+          --         CautionaryTale = true, -- Distinguishes 'tale' from 'tail'
+          --         ChangeTack = true, -- Corrects idiom errors
+          --         CompoundNouns = true, -- Checks compound noun formation
+          --         DespiteItIs = true, -- Corrects 'despite' with wrong 'is' form
+          --         EverEvery = true, -- Corrects 'every' typo for 'ever'
+          --         FarBeIt = true, -- Ensures proper 'far be it from' usage
+          --         FewUnitsOfTimeAgo = true, -- Corrects 'few' to 'a few' in time expressions
+          --         FleshOutVsFullFledged = true, -- Distinguishes these phrases
+          --         ForNoun = true, -- Corrects archaic 'fro' to 'for'
+          --         FreePredicate = true, -- Swaps 'fee' for 'free' with linking verbs
+          --         FriendOfMe = true, -- Corrects pronoun usage in 'friend of' constructions
+          --         GoSoFarAsTo = true, -- Ensures proper idiom form
+          --         GoToWar = true, -- Corrects 'go at war' to 'go to war'
+          --         HopHope = true, -- Corrects hop/hope confusion
+          --         HowTo = true, -- Ensures 'to' in 'how to' constructions
+          --         ItLooksLikeThat = true, -- Removes redundant 'that'
+          --         JealousOf = true, -- Ensures proper preposition
+          --         LeftRightHand = true, -- Hyphenates 'left-hand'/'right-hand' as adjectives
+          --         LessWorse = true, -- Suggests better comparisons than 'less worse'
+          --         MixedBag = true, -- Corrects 'mixed bad' to 'mixed bag'
+          --         ModalBeAdjective = true, -- Finds missing 'be' between modal and adjective
+          --         ModalSeem = true, -- Suggests 'seem' or 'be' after modals
+          --         MoreBetter = true, -- Flags redundant 'more' with comparatives
+          --         MostNumber = true, -- Corrects 'most number'
+          --         MostOfTheTimes = true, -- Uses singular 'time'
+          --         NailOnTheHead = true, -- Corrects variants of this idiom
+          --         NoMatchFor = true, -- Grammar check for 'no match for'
+          --         NorModalPronoun = true, -- Corrects word order after 'nor'
+          --         NounVerbConfusion = true, -- Detects noun/verb confusion
+          --         ObsessPreposition = true, -- Ensures valid prepositions with 'obsess'
+          --         OldestInTheBook = true, -- Uses singular 'book' in idiom
+          --         OnceOrTwice = true, -- Corrects 'once a twice'
+          --         OneAndTheSame = true, -- Corrects 'one in the same'
+          --         OnFloor = true, -- Prefers 'on the floor' for building locations
+          --         OpenCompounds = true, -- Ensures proper compound word spacing
+          --         OpenTheLight = true, -- Prefers 'turn on' over 'open' for lights
+          --         OrthographicConsistency = true, -- Matches dictionary capitalization
+          --         OughtToBe = true, -- Corrects 'out to be' to 'ought to be'
+          --         PhrasalVerbAsCompoundNoun = true, -- Checks phrasal verb compounds
+          --         PiqueInterest = true, -- Corrects 'peak/peek interest' to 'pique'
+          --         PluralWrongWordOfPhrase = true, -- Pluralizes main noun not last noun
+          --         PossessiveYour = true, -- Prefers possessive 'your' before nouns
+          --         ProgressiveNeedsBe = true, -- Fixes ungrammatical progressive constructions
+          --         PronounAre = true, -- Corrects 'r' typo for 'are'
+          --         PronounKnew = true, -- Corrects 'new' typo for 'knew'
+          --         QuantifierNeedsOf = true, -- Adds missing 'of' after quantifiers
+          --         QuantifierNumeralConflict = true, -- Detects quantifier-numeral conflicts
+          --         RollerSkated = true, -- Hyphenates 'roller-skate' past tense
+          --         ShootOneselfInTheFoot = true, -- Corrects variants of this idiom
+          --         SimplePastToPastParticiple = true, -- Grammar check for past forms
+          --         SinceDuration = true, -- Ensures 'since' with point in time not duration
+          --         SingleBe = true, -- Removes duplicate 'be' forms
+          --         SomeWithoutArticle = true, -- Removes redundant article before 'some'
+          --         SomethingIs = true, -- Suggests "something's" or "something is"
+          --         SomewhatSomething = true, -- Prefers 'something of a' traditionally
+          --         SoughtAfter = true, -- Corrects 'sort after' to 'sought after'
+          --         TakeALookTo = true, -- Corrects preposition to 'at'
+          --         TakeMedicine = true, -- Prefers 'take' over 'eat' for medicine
+          --         ThatWhich = true, -- Removes redundant 'that which'
+          --         TheHowWhy = true, -- Removes extra 'the' from 'the how'
+          --         TheMy = true, -- Flags article with possessive
+          --         TheProperNounPossessive = true, -- Removes 'the' before possessive proper nouns
+          --         ThisTypeOfThing = true, -- Checks number agreement in type phrases
+          --         ThrowAway = true, -- Corrects 'through away' typo
+          --         ThrowRubbish = true, -- Prefers 'throw away' rubbish
+          --         ToAdverb = true, -- Removes duplicate 'to' around adverbs
+          --         TryOnesHandAt = true, -- Uses singular 'hand' in idiom
+          --         VerbToAdjective = true, -- Suggests adjective where verb was written
+          --         ViciousCircle = true, -- Standard variant
+          --         ViciousCircleOrCycle = false, -- Alternative accepted variant
+          --         ViciousCycle = false, -- Less preferred variant
+          --         WayTooAdjective = true, -- Replaces 'to' with 'too' after 'way'
+          --         Whereas = true, -- Corrects 'where as' to 'whereas'
+          --         WhomSubjectOfVerb = true, -- Detects 'whom' used as subject
+          --         WidelyAccepted = true, -- Prefers adverb 'widely' over 'wide'
+          --         WinPrize = true, -- Distinguishes 'prize' from 'price'/'prise'
+          --         WishCould = true, -- Uses 'could' not 'can' after 'wish'
+          --         WouldNeverHave = true, -- Corrects word order with 'never'
+          --       },
+          --       codeActions = {
+          --         ForceStable = true,
+          --       },
+          --     },
+          --   },
+          -- },
           lua_ls = {
             -- cmd = { ... },
             -- filetypes = { ... },
