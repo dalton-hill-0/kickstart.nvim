@@ -38,11 +38,61 @@
 -- NOTE: URL opening now uses vim.ui.open by default (works on Linux/Mac/Windows)
 --       To customize URL handling, configure vim.ui.open in your init.lua
 --
+-- WORKSPACES:
+--   Workspaces are loaded from ~/.config/nvim/obsidian-workspaces.json
+--   This allows different vault configurations on different machines.
+--   
+--   Example obsidian-workspaces.json:
+--   [
+--     {
+--       "name": "work-notes",
+--       "path": "~/Documents/work/notes"
+--     },
+--     {
+--       "name": "personal",
+--       "path": "~/Documents/vaults/personal"
+--     }
+--   ]
+--
+--   If the file doesn't exist, default workspaces will be used.
+--
 -- TEMPLATES:
 --   peptribe-docs: ~/projects/github.com/dalton-hill-0/peptribe/docs/templates/
 --   personal:      ~/Documents/vaults/personal/templates/
 --
 -- =====================================================================
+
+-- Load workspaces from external file or use defaults
+-- This allows different workspace configurations per machine
+local function load_workspaces()
+  local workspaces_file = vim.fn.expand '~/.config/nvim/obsidian-workspaces.json'
+  
+  -- Try to read the workspaces file
+  local file = io.open(workspaces_file, 'r')
+  if file then
+    local content = file:read '*a'
+    file:close()
+    
+    local ok, workspaces = pcall(vim.json.decode, content)
+    if ok and workspaces and #workspaces > 0 then
+      return workspaces
+    else
+      vim.notify('Failed to parse obsidian-workspaces.json, using defaults', vim.log.levels.WARN)
+    end
+  end
+  
+  -- Default workspaces if file doesn't exist or parsing failed
+  return {
+    {
+      name = 'peptribe-docs',
+      path = '~/projects/github.com/dalton-hill-0/peptribe/docs',
+    },
+    {
+      name = 'personal',
+      path = '~/Documents/vaults/personal',
+    },
+  }
+end
 
 return {
   'obsidian-nvim/obsidian.nvim',
@@ -59,17 +109,8 @@ return {
   opts = {
     legacy_commands = false,
 
-    -- Workspaces - your note vaults
-    workspaces = {
-      {
-        name = 'peptribe-docs',
-        path = '~/projects/github.com/dalton-hill-0/peptribe/docs',
-      },
-      {
-        name = 'personal',
-        path = '~/Documents/vaults/personal',
-      },
-    },
+    -- Workspaces - loaded from file or defaults
+    workspaces = load_workspaces(),
 
     -- Note ID generation - use simple lowercase with hyphens
     -- Example: "my-new-note.md"
@@ -84,7 +125,7 @@ return {
     -- Note path function - where new notes are placed
     note_path_func = function(spec)
       local path = spec.dir / tostring(spec.id)
-      return path:with_suffix('.md')
+      return path:with_suffix '.md'
     end,
 
     -- Frontmatter configuration (replaces disable_frontmatter)
@@ -236,7 +277,7 @@ return {
     require('obsidian').setup(opts)
 
     -- Add markdown preview keymap if available
-    if vim.fn.exists(':MarkdownPreview') == 2 then
+    if vim.fn.exists ':MarkdownPreview' == 2 then
       vim.keymap.set('n', '<leader>op', '<cmd>MarkdownPreview<CR>', {
         desc = '[O]bsidian: [P]review markdown',
       })
