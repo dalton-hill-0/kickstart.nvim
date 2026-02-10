@@ -742,6 +742,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettier', -- Used to format markdown and other files
         'markdownlint',
         'golangci-lint-langserver', -- golangci_lint_ls LSP server
         -- 'css-lsp',
