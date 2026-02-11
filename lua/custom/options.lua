@@ -11,11 +11,3 @@ vim.opt.clipboard = 'unnamedplus'
 
 vim.opt.textwidth = 80
 vim.opt.wrap = true
-
--- Set conceal level for markdown files so they work with Obsidian
-vim.cmd [[
-	augroup MarkdownConceal
-		autocmd!
-		autocmd FileType markdown setlocal conceallevel=1
-	augroup END
-]]
