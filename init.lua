@@ -981,12 +981,13 @@ require('lazy').setup({
     opts = {
       highlight = {
         enable = true,
+        disable = { 'markdown' }, -- Disable treesitter for markdown to avoid conflicting with conceal
         -- Enable additional vim regex highlighting for markdown
         additional_vim_regex_highlighting = { 'markdown' },
       },
     },
     config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
+      require('nvim-treesitter').setup(opts)
     end,
     -- NOTE: There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
