@@ -978,16 +978,11 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    opts = {
-      highlight = {
-        enable = true,
-        disable = { 'markdown' }, -- Disable treesitter for markdown to avoid conflicting with conceal
-        -- Enable additional vim regex highlighting for markdown
-        additional_vim_regex_highlighting = { 'markdown' },
-      },
-    },
-    config = function(_, opts)
-      require('nvim-treesitter').setup(opts)
+    config = function()
+      -- Neovim 0.10+ has built-in treesitter, no need for nvim-treesitter.configs
+      -- Just ensure parsers are installed
+      local parser_install_dir = vim.fn.stdpath('data') .. '/treesitter'
+      vim.opt.runtimepath:append(parser_install_dir)
     end,
     -- NOTE: There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
