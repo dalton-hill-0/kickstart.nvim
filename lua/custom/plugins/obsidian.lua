@@ -130,7 +130,26 @@ return {
 
     -- Frontmatter configuration (replaces disable_frontmatter)
     frontmatter = {
-      enabled = true,
+      enabled = function(path)
+        -- Never update frontmatter for specific files
+        -- path is vault-relative, e.g. "some/dir/SKILL.md"
+        local skip_frontmatter_files = {
+          'SKILL.md',
+          'README.md',
+        }
+        
+        if path then
+          for _, filename in ipairs(skip_frontmatter_files) do
+            -- Escape special pattern characters and match at end of path
+            local pattern = filename:gsub('([%.%-])', '%%%1') .. '$'
+            if path:match(pattern) then
+              return false
+            end
+          end
+        end
+        
+        return true
+      end,
     },
 
     -- Templates configuration
