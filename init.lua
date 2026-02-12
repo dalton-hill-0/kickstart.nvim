@@ -96,7 +96,6 @@ vim.g.have_nerd_font = true
 --- [[ Load custom configuration ]]
 --- Load custom settings before plugins to ensure proper initialization order
 require 'custom.options'
-require 'custom.keymaps'
 require 'custom.autocmds'
 
 -- [[ Setting options ]]
@@ -910,27 +909,19 @@ require('lazy').setup({
     },
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('tokyonight').setup {
-  --       styles = {
-  --         comments = { italic = false }, -- Disable italics in comments
-  --       },
-  --     }
-  --
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --   end,
-  -- },
+  {
+    'sainnhe/gruvbox-material',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.o.background = 'dark'
+      vim.g.gruvbox_material_background = 'hard'
+      vim.g.gruvbox_material_enable_italic = true
+      vim.cmd.colorscheme 'gruvbox-material'
+    end,
+  },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -976,18 +967,13 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    config = function()
-      -- Neovim 0.10+ has built-in treesitter, no need for nvim-treesitter.configs
-      -- Just ensure parsers are installed
-      local parser_install_dir = vim.fn.stdpath('data') .. '/treesitter'
-      vim.opt.runtimepath:append(parser_install_dir)
-    end,
-    -- NOTE: There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    opts = {
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = true,
+      },
+      -- ensure_installed = { 'go', 'gomod', 'gosum', 'gowork' },
+    },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
