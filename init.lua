@@ -888,9 +888,7 @@ require('lazy').setup({
 
       sources = {
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
-        per_filetype = {
-          markdown = { 'lsp', 'path', 'snippets', 'obsidian', 'obsidian_new', 'obsidian_tags' },
-        },
+        -- Obsidian sources will be automatically injected by obsidian.nvim for markdown files
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },

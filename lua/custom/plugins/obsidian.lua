@@ -41,7 +41,7 @@
 -- WORKSPACES:
 --   Workspaces are loaded from ~/.config/nvim/obsidian-workspaces.json
 --   This allows different vault configurations on different machines.
---   
+--
 --   Example obsidian-workspaces.json:
 --   [
 --     {
@@ -66,13 +66,17 @@
 -- This allows different workspace configurations per machine
 local function load_workspaces()
   local workspaces_file = vim.fn.expand '~/.config/nvim/obsidian-workspaces.json'
-  
+
   -- Try to read the workspaces file
   local file = io.open(workspaces_file, 'r')
+  if not file then
+    -- If the file does't exist, error out. Force user to resolve.
+    vim.notify('Obsidian workspaces file not found: ' .. workspaces_file .. '\nPlease create this file with your vault configurations.', vim.log.levels.ERROR)
+  end
   if file then
     local content = file:read '*a'
     file:close()
-    
+
     local ok, workspaces = pcall(vim.json.decode, content)
     if ok and workspaces and #workspaces > 0 then
       return workspaces
@@ -80,18 +84,6 @@ local function load_workspaces()
       vim.notify('Failed to parse obsidian-workspaces.json, using defaults', vim.log.levels.WARN)
     end
   end
-  
-  -- Default workspaces if file doesn't exist or parsing failed
-  return {
-    {
-      name = 'peptribe-docs',
-      path = '~/projects/github.com/dalton-hill-0/peptribe/docs',
-    },
-    {
-      name = 'personal',
-      path = '~/Documents/vaults/personal',
-    },
-  }
 end
 
 return {
@@ -137,7 +129,7 @@ return {
           'SKILL.md',
           'README.md',
         }
-        
+
         if path then
           for _, filename in ipairs(skip_frontmatter_files) do
             -- Escape special pattern characters and match at end of path
@@ -147,7 +139,7 @@ return {
             end
           end
         end
-        
+
         return true
       end,
     },
@@ -162,7 +154,9 @@ return {
     -- Completion configuration
     completion = {
       nvim_cmp = false,
+      blink = true,
       min_chars = 2,
+      create_new = true, -- Enable completion to create new notes
     },
 
     -- Daily notes
