@@ -744,6 +744,7 @@ require('lazy').setup({
         'prettier', -- Used to format markdown and other files
         'markdownlint',
         'golangci-lint-langserver', -- golangci_lint_ls LSP server
+        'tree-sitter-cli', -- Required for nvim-treesitter parser compilation
         -- 'css-lsp',
         -- 'prettierd',
       })
@@ -967,13 +968,10 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    opts = {
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = true,
-      },
-      -- ensure_installed = { 'go', 'gomod', 'gosum', 'gowork' },
-    },
+    config = function()
+      -- Install parsers for Go
+      require('nvim-treesitter').install({ 'go', 'gomod', 'gosum', 'gowork' })
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
