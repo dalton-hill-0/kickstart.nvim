@@ -155,8 +155,7 @@ return {
     completion = {
       nvim_cmp = false,
       blink = true,
-      min_chars = 2,
-      create_new = true, -- Enable completion to create new notes
+      min_chars = 1,
     },
 
     -- Daily notes
