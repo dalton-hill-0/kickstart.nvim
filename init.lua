@@ -180,6 +180,7 @@ vim.o.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show [D]iagnostics under cursor' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -969,8 +970,152 @@ require('lazy').setup({
     build = ':TSUpdate',
     lazy = false,
     config = function()
-      -- Install parsers for Go
-      require('nvim-treesitter').install({ 'go', 'gomod', 'gosum', 'gowork' })
+      -- Install parsers for full-stack development
+      require('nvim-treesitter').install {
+        -- Go and related
+        'go',
+        'gomod',
+        'gosum',
+        'gowork',
+        -- JavaScript/TypeScript ecosystem
+        'javascript',
+        'typescript',
+        'tsx',
+        'jsdoc',
+        -- Python
+        'python',
+        -- Configuration/Data formats
+        'json',
+        'yaml',
+        'toml',
+        -- Shell scripting
+        'bash',
+        -- Web technologies
+        'html',
+        'css',
+        'scss',
+        -- Documentation
+        'markdown',
+        'markdown_inline',
+        -- Other useful parsers
+        'regex',
+        'vim',
+        'vimdoc',
+        'lua',
+        'luadoc',
+        'diff',
+        'git_config',
+        'git_rebase',
+        'gitcommit',
+        'gitignore',
+      }
+    end,
+  },
+
+  { -- Treesitter text objects for advanced code navigation
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      local select = require 'nvim-treesitter-textobjects.select'
+      local move = require 'nvim-treesitter-textobjects.move'
+      local swap = require 'nvim-treesitter-textobjects.swap'
+
+      -- Text object selection keymaps
+      for _, mode in ipairs { 'x', 'o' } do
+        -- Function text objects
+        vim.keymap.set(mode, 'af', function()
+          select.select_textobject('@function.outer', 'textobjects')
+        end, { desc = 'Select around function' })
+        vim.keymap.set(mode, 'if', function()
+          select.select_textobject('@function.inner', 'textobjects')
+        end, { desc = 'Select inside function' })
+
+        -- Class text objects
+        vim.keymap.set(mode, 'ac', function()
+          select.select_textobject('@class.outer', 'textobjects')
+        end, { desc = 'Select around class' })
+        vim.keymap.set(mode, 'ic', function()
+          select.select_textobject('@class.inner', 'textobjects')
+        end, { desc = 'Select inside class' })
+
+        -- Parameter text objects
+        vim.keymap.set(mode, 'aa', function()
+          select.select_textobject('@parameter.outer', 'textobjects')
+        end, { desc = 'Select around parameter' })
+        vim.keymap.set(mode, 'ia', function()
+          select.select_textobject('@parameter.inner', 'textobjects')
+        end, { desc = 'Select inside parameter' })
+
+        -- Block text objects
+        vim.keymap.set(mode, 'ab', function()
+          select.select_textobject('@block.outer', 'textobjects')
+        end, { desc = 'Select around block' })
+        vim.keymap.set(mode, 'ib', function()
+          select.select_textobject('@block.inner', 'textobjects')
+        end, { desc = 'Select inside block' })
+      end
+
+      -- Navigation keymaps
+      for _, mode in ipairs { 'n', 'x', 'o' } do
+        -- Jump to next function start
+        vim.keymap.set(mode, ']f', function()
+          move.goto_next_start('@function.outer', 'textobjects')
+        end, { desc = 'Next function start' })
+
+        -- Jump to next function end
+        vim.keymap.set(mode, ']F', function()
+          move.goto_next_end('@function.outer', 'textobjects')
+        end, { desc = 'Next function end' })
+
+        -- Jump to previous function start
+        vim.keymap.set(mode, '[f', function()
+          move.goto_previous_start('@function.outer', 'textobjects')
+        end, { desc = 'Previous function start' })
+
+        -- Jump to previous function end
+        vim.keymap.set(mode, '[F', function()
+          move.goto_previous_end('@function.outer', 'textobjects')
+        end, { desc = 'Previous function end' })
+
+        -- Jump to next class start
+        vim.keymap.set(mode, ']c', function()
+          move.goto_next_start('@class.outer', 'textobjects')
+        end, { desc = 'Next class start' })
+
+        -- Jump to next class end
+        vim.keymap.set(mode, ']C', function()
+          move.goto_next_end('@class.outer', 'textobjects')
+        end, { desc = 'Next class end' })
+
+        -- Jump to previous class start
+        vim.keymap.set(mode, '[c', function()
+          move.goto_previous_start('@class.outer', 'textobjects')
+        end, { desc = 'Previous class start' })
+
+        -- Jump to previous class end
+        vim.keymap.set(mode, '[C', function()
+          move.goto_previous_end('@class.outer', 'textobjects')
+        end, { desc = 'Previous class end' })
+
+        -- Jump to next parameter
+        vim.keymap.set(mode, ']a', function()
+          move.goto_next_start('@parameter.inner', 'textobjects')
+        end, { desc = 'Next parameter' })
+
+        -- Jump to previous parameter
+        vim.keymap.set(mode, '[a', function()
+          move.goto_previous_start('@parameter.inner', 'textobjects')
+        end, { desc = 'Previous parameter' })
+      end
+
+      -- Swap parameters
+      vim.keymap.set('n', '<leader>sn', function()
+        swap.swap_next '@parameter.inner'
+      end, { desc = 'Swap with next parameter' })
+
+      vim.keymap.set('n', '<leader>sp', function()
+        swap.swap_previous '@parameter.inner'
+      end, { desc = 'Swap with previous parameter' })
     end,
   },
 
