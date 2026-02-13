@@ -990,6 +990,7 @@ require('lazy').setup({
         'toml',
         -- Shell scripting
         'bash',
+        'zsh',
         -- Web technologies
         'html',
         'css',
