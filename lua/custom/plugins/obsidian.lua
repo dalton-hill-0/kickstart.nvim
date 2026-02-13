@@ -88,7 +88,7 @@ end
 
 return {
   'obsidian-nvim/obsidian.nvim',
-  version = '*',
+  version = 'v3.14.7',
   ft = 'markdown',
   dependencies = {
     'nvim-lua/plenary.nvim',
