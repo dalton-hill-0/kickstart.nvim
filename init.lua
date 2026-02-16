@@ -179,6 +179,16 @@ vim.o.confirm = true
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Clear the last visual selection marks "'<" and "'>"
+-- This is useful when plugins (like obsidian.nvim) act on the last visual
+-- selection; clearing these prevents accidental multi-line operations.
+vim.keymap.set('n', '<leader>cv', function()
+  -- setpos expects a list: [bufnum, lnum, col, off]
+  vim.fn.setpos("'<", {0, 0, 0, 0})
+  vim.fn.setpos("'>", {0, 0, 0, 0})
+  vim.notify('Cleared visual selection marks', vim.log.levels.INFO)
+end, { desc = 'Clear Visual selection' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show [D]iagnostics under cursor' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
