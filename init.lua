@@ -184,8 +184,8 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- selection; clearing these prevents accidental multi-line operations.
 vim.keymap.set('n', '<leader>cv', function()
   -- setpos expects a list: [bufnum, lnum, col, off]
-  vim.fn.setpos("'<", {0, 0, 0, 0})
-  vim.fn.setpos("'>", {0, 0, 0, 0})
+  vim.fn.setpos("'<", { 0, 0, 0, 0 })
+  vim.fn.setpos("'>", { 0, 0, 0, 0 })
   vim.notify('Cleared visual selection marks', vim.log.levels.INFO)
 end, { desc = 'Clear Visual selection' })
 
@@ -995,6 +995,8 @@ require('lazy').setup({
         -- Python
         'python',
         -- Configuration/Data formats
+        'gotmpl',
+        'helm',
         'json',
         'yaml',
         'toml',
@@ -1177,6 +1179,17 @@ require('lazy').setup({
     },
   },
 })
+
+vim.filetype.add {
+  extension = {
+    gotmpl = 'gotmpl',
+  },
+  pattern = {
+    ['.*/templates/.*%.tpl'] = 'helm',
+    ['.*/templates/.*%.ya?ml'] = 'helm',
+    ['helmfile.*%.ya?ml'] = 'helm',
+  },
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline` keep going past 80.
 -- vim: ts=2 sts=2 sw=2 et
