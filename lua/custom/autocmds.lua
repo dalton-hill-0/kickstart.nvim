@@ -30,6 +30,8 @@ vim.api.nvim_create_autocmd('FileType', {
     -- Python
     'python',
     -- Config/Data
+    'gotmpl',
+    'helm',
     'json',
     'yaml',
     'toml',

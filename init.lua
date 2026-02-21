@@ -179,6 +179,16 @@ vim.o.confirm = true
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Clear the last visual selection marks "'<" and "'>"
+-- This is useful when plugins (like obsidian.nvim) act on the last visual
+-- selection; clearing these prevents accidental multi-line operations.
+vim.keymap.set('n', '<leader>cv', function()
+  -- setpos expects a list: [bufnum, lnum, col, off]
+  vim.fn.setpos("'<", { 0, 0, 0, 0 })
+  vim.fn.setpos("'>", { 0, 0, 0, 0 })
+  vim.notify('Cleared visual selection marks', vim.log.levels.INFO)
+end, { desc = 'Clear Visual selection' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show [D]iagnostics under cursor' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -985,6 +995,8 @@ require('lazy').setup({
         -- Python
         'python',
         -- Configuration/Data formats
+        'gotmpl',
+        'helm',
         'json',
         'yaml',
         'toml',
@@ -1167,6 +1179,18 @@ require('lazy').setup({
     },
   },
 })
+
+vim.filetype.add {
+  extension = {
+    gotmpl = 'gotmpl',
+  },
+  pattern = {
+    ['.*/templates/.*%.tpl'] = 'helm',
+    ['.*/templates/.*%.ya?ml'] = 'helm',
+    ['helmfile.*%.ya?ml'] = 'helm',
+    ['helmfile.ya?ml.gotmpl'] = 'helm',
+  },
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline` keep going past 80.
 -- vim: ts=2 sts=2 sw=2 et
