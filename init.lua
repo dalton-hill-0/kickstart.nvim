@@ -808,6 +808,15 @@ require('lazy').setup({
           }
         end
       end,
+      formatters = {
+        prettier = {
+          -- Prettier 3.x defaults --ignore-path to [.gitignore, .prettierignore],
+          -- which causes it to skip files in git-ignored directories (e.g. working/).
+          -- Explicitly set --ignore-path to only .prettierignore so git-ignored
+          -- files are still formatted.
+          prepend_args = { '--ignore-path', '.prettierignore' },
+        },
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
         markdown = { 'prettier' },
