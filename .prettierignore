@@ -1,0 +1,10 @@
+tags
+test.sh
+nvim/
+spell/
+lazy-lock.json
+obsidian-workspaces.json
+
+# Note: By using this .prettierignore file, we override Prettier's default
+# behavior of respecting .gitignore. This allows Prettier to format files
+# in the working/ directory even though they are git-ignored.
