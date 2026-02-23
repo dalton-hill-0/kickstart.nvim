@@ -816,10 +816,20 @@ require('lazy').setup({
           -- files are still formatted.
           prepend_args = { '--ignore-path', '.prettierignore' },
         },
+        -- Post-processor for markdown: prettier always indents checkbox list
+        -- continuation lines by 6 spaces (aligning with the text after "- [ ] ").
+        -- With conceallevel=2 the "[ ] " is hidden, so the visual indent is only
+        -- 2 chars. This script reduces checkbox continuations to 2-space indent
+        -- (matching regular list items) so they line up with the concealed view.
+        fix_checkbox_indent = {
+          command = 'python3',
+          args = { vim.fn.stdpath 'config' .. '/scripts/fix-checkbox-indent.py' },
+          stdin = true,
+        },
       },
       formatters_by_ft = {
         lua = { 'stylua' },
-        markdown = { 'prettier' },
+        markdown = { 'prettier', 'fix_checkbox_indent' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
